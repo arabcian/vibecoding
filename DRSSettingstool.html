@@ -65,18 +65,60 @@ header h1{font-size:13px;font-weight:600;color:var(--text-bright);}
 .setting-desc{font-size:12px;color:var(--text-dim);margin-top:6px;line-height:1.6;}
 .control-section{margin-bottom:20px;}
 .control-label{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text-dim);margin-bottom:8px;}
-.enum-grid{display:flex;flex-direction:column;gap:3px;}
-.enum-opt{display:flex;align-items:flex-start;gap:9px;padding:7px 9px;border:1px solid var(--border);border-radius:4px;cursor:pointer;transition:all .1s;}
-.enum-opt:hover{border-color:var(--accent-dim);background:rgba(118,185,0,.04);}
-.enum-opt.selected{border-color:var(--accent);background:rgba(118,185,0,.08);}
-.enum-opt-body{flex:1;}
-.enum-opt-name{font-size:12px;color:var(--text-bright);font-weight:500;}
-.enum-opt-desc{font-size:11px;color:var(--text-dim);margin-top:2px;}
-.enum-opt-val{font-family:var(--mono);font-size:10px;color:var(--accent);margin-top:2px;}
-.radio-circle{width:13px;height:13px;border-radius:50%;border:2px solid var(--text-dim);flex-shrink:0;margin-top:2px;display:flex;align-items:center;justify-content:center;transition:border-color .1s;}
-.enum-opt.selected .radio-circle{border-color:var(--accent);}
-.radio-inner{width:5px;height:5px;border-radius:50%;background:var(--accent);opacity:0;transition:opacity .1s;}
-.enum-opt.selected .radio-inner{opacity:1;}
+.enum-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(120px,1fr));
+    gap:6px;
+    margin-top:8px;
+}
+
+.enum-opt{
+    display:block;
+    font-family:var(--mono);
+    font-size:10px;
+    padding:5px 8px;
+    border-radius:3px;
+    border:1px solid var(--border);
+    background:var(--surface);
+    color:var(--accent);
+    cursor:pointer;
+    transition:all .1s;
+}
+
+.enum-opt:hover{
+    border-color:var(--accent-dim);
+    background:rgba(118,185,0,.1);
+}
+
+.enum-opt.selected{
+    border-color:var(--accent);
+    background:rgba(118,185,0,.1);
+}
+
+.enum-opt-body{
+    display:block;
+}
+
+.enum-opt-name{
+    font-family:var(--mono);
+    font-size:10px;
+    color:var(--accent);
+    font-weight:400;
+    line-height:1.2;
+}
+
+.enum-opt-desc{
+    display:none;
+}
+
+.enum-opt-val{
+    display:none;
+}
+
+.radio-circle,
+.radio-inner{
+    display:none;
+}
 .num-row,.hex-row,.dec-hex-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
 .num-input,.hex-input,.dec-input{background:var(--surface);border:1px solid var(--border);color:var(--text-bright);font-family:var(--mono);font-size:13px;padding:6px 10px;border-radius:4px;outline:none;}
 .num-input{width:150px;} .hex-input{width:150px;color:var(--accent);} .dec-input{width:120px;}
@@ -181,10 +223,10 @@ header h1{font-size:13px;font-weight:600;color:var(--text-bright);}
 <script>
 const GPU_ARCHS = [
   { name:'GeForce 900 Series', arch:'Maxwell', prefix:'GM', code:'GM200', example:'GTX 980 Ti' },
-  { name:'GeForce 10 Series', arch:'Pascal', prefix:'GP', code:'GP104', example:'GTX 1080' },
-  { name:'GeForce 16 / 20 Series', arch:'Turing', prefix:'TU', code:'TU102', example:'RTX 2080 Ti' },
-  { name:'GeForce RTX 30 Series', arch:'Ampere', prefix:'GA', code:'GA102', example:'RTX 3090' },
-  { name:'GeForce RTX 40 Series', arch:'Ada Lovelace', prefix:'AD', code:'AD102', example:'RTX 4090' },
+  { name:'GeForce 10 Series', arch:'Pascal', prefix:'GP', code:'GP100', example:'GTX 1080' },
+  { name:'GeForce 16 / 20 Series', arch:'Turing', prefix:'TU', code:'TU100', example:'RTX 2080 Ti' },
+  { name:'GeForce RTX 30 Series', arch:'Ampere', prefix:'GA', code:'GA100', example:'RTX 3090' },
+  { name:'GeForce RTX 40 Series', arch:'Ada Lovelace', prefix:'AD', code:'AD100', example:'RTX 4090' },
   { name:'GeForce RTX 50 Series', arch:'Blackwell', prefix:'GB', code:'GB200', example:'RTX 5090' },
 ];
 
@@ -328,10 +370,10 @@ const SETTINGS = [
       {name:'Allow',val:'0x0'},{name:'Force Off',val:'0x1'},{name:'Disallow',val:'0x2'},{name:'ULMB',val:'0x3'},{name:'Fixed Refresh',val:'0x4'},
     ], desc:'VRR app override request state.' },
   { id:'0x1094F157', name:'VRR Feature Indicator', cat:'VRR / G-Sync', type:'hex-preset', default:'0x34534064', presets:[
-      {name:'Disabled',val:'0x34534064'},{name:'Enabled',val:'0x24545582'},
+      {name:'Disabled',val:'0x0'},{name:'Enabled',val:'0x1'},
     ], desc:'Toggle the VRR global feature indicator.' },
   { id:'0x1095F16F', name:'VRR Overlay Indicator', cat:'VRR / G-Sync', type:'hex-preset', default:'0x34534064', presets:[
-      {name:'Disabled',val:'0x34534064'},{name:'Enabled',val:'0x24545582'},
+      {name:'Disabled',val:'0x0'},{name:'Enabled',val:'0x1'},
     ], desc:'Display the VRR overlay indicator.' },
 
   // ── VSync / Flip (3 settings) ───────────────────────────────────────────
@@ -449,7 +491,7 @@ const SETTINGS = [
 
   // ── Refresh Rate (1 setting) ──────────────────────────────────���─────────
   { id:'0x0064B541', name:'Preferred Refresh Rate', cat:'Refresh Rate', type:'enum', default:'0x0', values:[
-      {name:'App Controlled',val:'0x0'},{name:'Highest Available',val:'0x1'},
+      {name:'App Controlled',val:'0x0'},{name:'Highest Available',val:'0x1'},{name:'Low Latency RR Mask',val:'0x00000FF0'},
     ], desc:'Override preferred refresh rate.' },
 
   // ── Stereo / Workstation (5 settings) ───────────────────────────────────
@@ -621,16 +663,18 @@ function openSetting(id) {
   if (s.type==='enum') {
     valHtml = `<div class="enum-grid">`+s.values.map(v=>{
       const sel = cur===v.val;
+      const isDefault = v.val===s.default;
       return `<div class="enum-opt ${sel?'selected':''}" onclick="setEnum('${id}','${v.val}',this)">
         <div class="radio-circle"><div class="radio-inner"></div></div>
-        <div class="enum-opt-body"><div class="enum-opt-name">${v.name}</div>
+        <div class="enum-opt-body"><div class="enum-opt-name">${v.name}${isDefault?` <span style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-dim);border:1px solid var(--border);border-radius:2px;padding:1px 4px;vertical-align:middle;">default</span>`:''}</div>
         ${v.desc?`<div class="enum-opt-desc">${v.desc}</div>`:''}
         <div class="enum-opt-val">${v.val}</div></div></div>`;
     }).join('')+`</div>`;
   } else if (s.type==='hex-preset') {
     valHtml = `<div class="hex-preset-grid">`+s.presets.map(p=>{
       const sel = cur===p.val;
-      return `<button class="hex-preset-btn ${sel?'selected':''}" onclick="setHexPreset('${id}','${p.val}')" style="${sel?'border-color:var(--accent);background:rgba(118,185,0,.1)':''}">${p.name}</button>`;
+      const isDefault = p.val===s.default;
+      return `<button class="hex-preset-btn ${sel?'selected':''}" onclick="setHexPreset('${id}','${p.val}')" style="${sel?'border-color:var(--accent);background:rgba(118,185,0,.1)':''}">${p.name}${isDefault?' <span style="font-size:8px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text-dim);border:1px solid var(--border);border-radius:2px;padding:1px 3px;">default</span>':''}</button>`;
     }).join('')+`</div>
     <div style="margin-top:12px;">
       <div class="hex-prefix">Or enter hex: 0x</div>
@@ -642,6 +686,7 @@ function openSetting(id) {
     valHtml = `<div class="num-row">
       <input class="num-input" type="number" value="${cv}" min="${s.min}" max="${s.max}" oninput="setNumeric('${id}',this.value)">
       <span class="num-range">${s.min} – ${s.max}</span>
+      <span style="font-family:var(--mono);font-size:10px;color:var(--text-dim);">default: ${s.default}</span>
       <button class="clear-btn" onclick="clearSetting('${id}')">Reset</button>
     </div>`;
   } else if (s.type==='dec-hex') {
@@ -656,6 +701,7 @@ function openSetting(id) {
         <span class="hex-prefix">Hex: 0x</span>
         <input class="hex-input" type="text" value="${hexVal.toUpperCase()}" oninput="setHex('${id}',this.value)" placeholder="Hex">
       </div>
+      <span style="font-family:var(--mono);font-size:10px;color:var(--text-dim);">default: ${s.default}</span>
       <button class="clear-btn" onclick="clearSetting('${id}')">Reset</button>
     </div>`;
   } else {
@@ -663,6 +709,7 @@ function openSetting(id) {
     valHtml = `<div class="hex-row">
       <span class="hex-prefix">0x</span>
       <input class="hex-input" type="text" value="${cv.toUpperCase()}" oninput="setHex('${id}',this.value)" placeholder="Hex value">
+      <span style="font-family:var(--mono);font-size:10px;color:var(--text-dim);">default: ${s.default}</span>
       <button class="clear-btn" onclick="clearSetting('${id}')">Reset</button>
     </div>`;
   }
@@ -690,10 +737,11 @@ function openSetting(id) {
 }
 
 function setEnum(id,val,el) {
-  state[id]=val;
-  el.closest('.enum-grid').querySelectorAll('.enum-opt').forEach(e=>e.classList.remove('selected'));
+  state[id] = val;
+  el.closest('.enum-grid').querySelectorAll('.enum-opt').forEach(e => e.classList.remove('selected'));
   el.classList.add('selected');
   afterChange(id);
+  openSetting(id);
 }
 
 function setHexPreset(id, val) {
