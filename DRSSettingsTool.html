@@ -67,44 +67,57 @@ header h1{font-size:13px;font-weight:600;color:var(--text-bright);}
 .control-label{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text-dim);margin-bottom:8px;}
 .enum-grid{
     display:grid;
-    grid-template-columns:repeat(auto-fill,minmax(120px,1fr));
-    gap:6px;
+    grid-template-columns:repeat(4,1fr);
+    gap:4px;
     margin-top:8px;
 }
 
 .enum-opt{
-    display:block;
+    display:flex;
+    align-items:center;
     font-family:var(--mono);
     font-size:10px;
-    padding:5px 8px;
+    padding:5px 9px;
     border-radius:3px;
     border:1px solid var(--border);
     background:var(--surface);
-    color:var(--accent);
     cursor:pointer;
-    transition:all .1s;
+    transition:background .1s,border-color .1s;
+    min-height:28px;
+    box-sizing:border-box;
 }
 
 .enum-opt:hover{
     border-color:var(--accent-dim);
-    background:rgba(118,185,0,.1);
+    background:rgba(118,185,0,.06);
 }
 
 .enum-opt.selected{
     border-color:var(--accent);
-    background:rgba(118,185,0,.1);
+    background:rgba(118,185,0,.08);
+}
+.enum-opt.selected .enum-opt-name{
+    color:var(--accent);
+    font-weight:500;
 }
 
 .enum-opt-body{
-    display:block;
+    display:flex;
+    align-items:center;
+    gap:4px;
+    flex:1;
+    min-width:0;
 }
 
 .enum-opt-name{
     font-family:var(--mono);
     font-size:10px;
-    color:var(--accent);
+    color:var(--text);
     font-weight:400;
-    line-height:1.2;
+    line-height:1.3;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
 }
 
 .enum-opt-desc{
@@ -120,16 +133,16 @@ header h1{font-size:13px;font-weight:600;color:var(--text-bright);}
     display:none;
 }
 .num-row,.hex-row,.dec-hex-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
-.num-input,.hex-input,.dec-input{background:var(--surface);border:1px solid var(--border);color:var(--text-bright);font-family:var(--mono);font-size:13px;padding:6px 10px;border-radius:4px;outline:none;}
+.num-input,.hex-input,.dec-input{background:var(--surface);border:1px solid var(--border);color:var(--text-bright);font-family:var(--mono);font-size:11px;padding:5px 9px;border-radius:3px;outline:none;height:28px;}
 .num-input{width:150px;} .hex-input{width:150px;color:var(--accent);} .dec-input{width:120px;}
 .num-input:focus,.hex-input:focus,.dec-input:focus{border-color:var(--accent-dim);}
 .num-range,.hex-prefix,.dec-prefix{font-family:var(--mono);font-size:10px;color:var(--text-dim);}
-.clear-btn{font-family:var(--mono);font-size:10px;padding:4px 9px;border-radius:3px;border:1px solid var(--border);background:none;color:var(--text-dim);cursor:pointer;}
+.clear-btn{font-family:var(--mono);font-size:10px;padding:4px 9px;border-radius:3px;border:1px solid var(--border);background:none;color:var(--text-dim);cursor:pointer;height:28px;}
 .clear-btn:hover{border-color:var(--red);color:var(--red);}
 .syntax-box{background:var(--surface2);border:1px solid var(--border);border-radius:4px;padding:10px;margin-top:10px;font-family:var(--mono);font-size:11px;color:var(--accent);overflow-x:auto;white-space:pre-wrap;word-break:break-word;}
 .syntax-label{font-size:10px;color:var(--text-dim);margin-bottom:4px;text-transform:uppercase;letter-spacing:.08em;font-weight:600;}
-.hex-preset-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:6px;margin-top:8px;}
-.hex-preset-btn{font-family:var(--mono);font-size:10px;padding:5px 8px;border-radius:3px;border:1px solid var(--border);background:var(--surface);color:var(--accent);cursor:pointer;transition:all .1s;}
+.hex-preset-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;margin-top:8px;}
+.hex-preset-btn{font-family:var(--mono);font-size:10px;padding:5px 9px;border-radius:3px;border:1px solid var(--border);background:var(--surface);color:var(--text);cursor:pointer;transition:background .1s,border-color .1s;min-height:28px;text-align:left;}
 .hex-preset-btn:hover{border-color:var(--accent-dim);background:rgba(118,185,0,.1);}
 /* profile panel */
 .profile-panel{padding:16px;}
@@ -259,8 +272,8 @@ const SETTINGS = [
   { id:'0x10E41DF4', name:'DLAA Override', cat:'DLSS / NGX', type:'enum', default:'0x0', values:[
       {name:'Default',val:'0x0'},{name:'Force DLAA',val:'0x1'},
     ], desc:'Force DLSS mode to DLAA.' },
-  { id:'0x10E41DF5', name:'DLSS-SR Scaling Ratio', cat:'DLSS / NGX', type:'numeric', min:0, max:100, default:0, desc:'Override scaling ratio for DLSS-SR (33-100%).' },
-  { id:'0x10C7D4A2', name:'DLSS-RR Scaling Ratio', cat:'DLSS / NGX', type:'numeric', min:0, max:100, default:0, desc:'Override scaling ratio for DLSS-RR (33-100%).' },
+  { id:'0x10E41DF5', name:'DLSS-SR Scaling Ratio', cat:'DLSS / NGX', type:'numeric', min:33, max:100, default:0, desc:'Override scaling ratio for DLSS-SR (33-100%).' },
+  { id:'0x10C7D4A2', name:'DLSS-RR Scaling Ratio', cat:'DLSS / NGX', type:'numeric', min:33, max:100, default:0, desc:'Override scaling ratio for DLSS-RR (33-100%).' },
   { id:'0x104D6667', name:'DLSS-G Multi-Frame Count', cat:'DLSS / NGX', type:'enum', default:'0x0', values:[
       {name:'Off',val:'0x0'},{name:'1',val:'0x1'},{name:'2',val:'0x2'},{name:'3',val:'0x3'},{name:'4',val:'0x4'},{name:'5',val:'0x5'},{name:'6',val:'0x6'},{name:'7',val:'0x7'},{name:'8',val:'0x8'},{name:'Max (15)',val:'0xf'},
     ], desc:'Override DLSSG multi-frame count.' },
@@ -277,7 +290,21 @@ const SETTINGS = [
     ], desc:'Enable NVIDIA Image Scaling upscaling.' },
 
   // ── Anti-Aliasing (7 settings) ──────────────────────────────────────────
-  { id:'0x10ECDB82', name:'AA Behavior Flags', cat:'Anti-Aliasing', type:'hex', default:'0x0', desc:'Control how AA mode interacts with settings (bitfield).' },
+  { id:'0x10ECDB82', name:'AA Behavior Flags', cat:'Anti-Aliasing', type:'bitfield', default:'0x0',
+    bits:[
+      {name:'Treat Override as App Controlled', val:0x00000001},
+      {name:'Treat Override as Enhance',        val:0x00000002},
+      {name:'Disable Override',                 val:0x00000003},
+      {name:'Treat Enhance as App Controlled',  val:0x00000004},
+      {name:'Treat Enhance as Override',        val:0x00000008},
+      {name:'Disable Enhance',                  val:0x0000000c},
+      {name:'Map VCAA to Multisampling',        val:0x00010000},
+      {name:'SLI Disable Transparency SS',      val:0x00020000},
+      {name:'Disable CPLAA',                    val:0x00040000},
+      {name:'Skip RT Dim Check for Enhance',    val:0x00080000},
+      {name:'Disable SLIAA',                    val:0x00100000},
+    ],
+    desc:'AA davranış bayrakları (bitfield). Her seçenek bağımsız bir bittir — birden fazla seçilebilir ve değerleri OR ile birleştirilir.' },
   { id:'0x10FC2D9C', name:'AA Transparency Multisampling', cat:'Anti-Aliasing', type:'enum', default:'0x0', values:[
       {name:'Off',val:'0x0'},{name:'On',val:'0x4'},
     ], desc:'Enable alpha-to-coverage transparency AA.' },
@@ -461,7 +488,7 @@ const SETTINGS = [
   // ── Misc (12 settings) ──────────────────────────────────────────────────
   { id:'0x108F0841', name:'Export Performance Counters', cat:'Misc', type:'enum', default:'0x0', values:[
       {name:'Off',val:'0x0'},{name:'On',val:'0x1'},
-    ], desc:'Export GPU performance counters.' },
+    ], desc:'GPU donanım performans sayaçlarını dışa aktar. ⚠️ DXVK-NVAPI üzerinden etkisizdir — DXVK, NVAPI çağrılarını taklit eder ancak GPU PMU donanım sayaçlarına erişemez. Bu ayarın değiştirilmesi DXVK_NVAPI_DRS_SETTINGS ortam değişkeni ile gözlemlenebilir bir etki yaratmaz. Gerçek sayaç erişimi için: nvidia-smi dmon, Nsight Graphics veya NVTX kullanın.' },
   { id:'0x10115C8D', name:'External Quiet Mode (XQM)', cat:'Misc', type:'enum', default:'0x0', values:[
       {name:'Off',val:'0x0'},{name:'On',val:'0x1'},
     ], desc:'Enable External Quiet Mode.' },
@@ -472,7 +499,7 @@ const SETTINGS = [
       {name:'Disabled',val:'0x34534064'},{name:'Enabled',val:'0x24545582'},
     ], desc:'Display PhysX on-screen indicator.' },
   { id:'0x10115C8C', name:'Battery Boost App FPS', cat:'Misc', type:'numeric', min:0, max:1023, default:0, desc:'Battery Boost target FPS.' },
-  { id:'0x00AE785C', name:'Power Throttle (PCIe)', cat:'Misc', type:'hex', default:'0x0', desc:'Power throttle setting for PCIe compliance.' },
+  { id:'0x00AE785C', name:'Power Throttle (PCIe)', cat:'Misc', type:'enum', default:'0x0', values:[{name:'Off',val:'0x0'},{name:'On',val:'0x1'}], desc:'PCIe slot güç uyum kısıtlaması. GPU TDP\'sini PCIe slot limitine (≤75W) kısıtlar.', syntax:'On: Harici güç konektörü olmayan kartlarda slot/anakart koruması için.\nOff: Normal masaüstü/laptop kurulumlarında (default).' },
   { id:'0x104554B6', name:'Application Profile Notification Timeout', cat:'Misc', type:'enum', default:'0x0', values:[
       {name:'Disabled',val:'0x0'},{name:'9 Seconds',val:'0x9'},{name:'15 Seconds',val:'0xf'},{name:'30 Seconds',val:'0x1e'},{name:'1 Minute',val:'0x3c'},{name:'2 Minutes',val:'0x78'},
     ], desc:'Application Profile Notification timeout.' },
@@ -666,7 +693,7 @@ function openSetting(id) {
       const isDefault = v.val===s.default;
       return `<div class="enum-opt ${sel?'selected':''}" onclick="setEnum('${id}','${v.val}',this)">
         <div class="radio-circle"><div class="radio-inner"></div></div>
-        <div class="enum-opt-body"><div class="enum-opt-name">${v.name}${isDefault?` <span style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-dim);border:1px solid var(--border);border-radius:2px;padding:1px 4px;vertical-align:middle;">default</span>`:''}</div>
+        <div class="enum-opt-body"><div class="enum-opt-name">${isDefault?'<span style="color:#76b900;font-weight:900;margin-right:3px;font-size:13px;line-height:1;">*</span>':''} ${v.name}</div>
         ${v.desc?`<div class="enum-opt-desc">${v.desc}</div>`:''}
         <div class="enum-opt-val">${v.val}</div></div></div>`;
     }).join('')+`</div>`;
@@ -674,19 +701,18 @@ function openSetting(id) {
     valHtml = `<div class="hex-preset-grid">`+s.presets.map(p=>{
       const sel = cur===p.val;
       const isDefault = p.val===s.default;
-      return `<button class="hex-preset-btn ${sel?'selected':''}" onclick="setHexPreset('${id}','${p.val}')" style="${sel?'border-color:var(--accent);background:rgba(118,185,0,.1)':''}">${p.name}${isDefault?' <span style="font-size:8px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text-dim);border:1px solid var(--border);border-radius:2px;padding:1px 3px;">default</span>':''}</button>`;
+      return `<button class="hex-preset-btn ${sel?'selected':''}" onclick="setHexPreset('${id}','${p.val}')" style="${sel?'border-color:var(--accent);background:rgba(118,185,0,.1)':''}">${p.name}${isDefault?'<span style="color:#76b900;font-weight:900;margin-right:3px;font-size:13px;line-height:1;">*</span>':''}</button>`;
     }).join('')+`</div>
-    <div style="margin-top:12px;">
-      <div class="hex-prefix">Or enter hex: 0x</div>
-      <input class="hex-input" type="text" value="${cur ? cur.replace(/^0x/i,'').toUpperCase() : ''}" oninput="setHex('${id}',this.value)" placeholder="Enter hex value">
-      <button class="clear-btn" onclick="clearSetting('${id}')" style="margin-left:8px;">Reset</button>
+    <div style="margin-top:8px;display:flex;align-items:center;gap:8px;">
+      <button class="clear-btn" onclick="clearSetting('${id}')">Reset</button>
+      
     </div>`;
   } else if (s.type==='numeric') {
     const cv = cur!=null ? (parseInt(cur,16)||parseInt(cur)||s.default) : s.default;
     valHtml = `<div class="num-row">
       <input class="num-input" type="number" value="${cv}" min="${s.min}" max="${s.max}" oninput="setNumeric('${id}',this.value)">
       <span class="num-range">${s.min} – ${s.max}</span>
-      <span style="font-family:var(--mono);font-size:10px;color:var(--text-dim);">default: ${s.default}</span>
+      
       <button class="clear-btn" onclick="clearSetting('${id}')">Reset</button>
     </div>`;
   } else if (s.type==='dec-hex') {
@@ -701,7 +727,26 @@ function openSetting(id) {
         <span class="hex-prefix">Hex: 0x</span>
         <input class="hex-input" type="text" value="${hexVal.toUpperCase()}" oninput="setHex('${id}',this.value)" placeholder="Hex">
       </div>
-      <span style="font-family:var(--mono);font-size:10px;color:var(--text-dim);">default: ${s.default}</span>
+      
+      <button class="clear-btn" onclick="clearSetting('${id}')">Reset</button>
+    </div>`;
+  } else if (s.type==='bitfield') {
+    const curVal = cur ? parseInt(cur.replace(/^0x/i,''),16) : 0;
+    const bitsHtml = s.bits.map(b => {
+      const isMask = (b.val & (b.val-1)) !== 0 && b.val > 1;
+      const active = isMask ? (curVal & b.val) === b.val : !!(curVal & b.val);
+      return `<div class="enum-opt ${active?'selected':''}" onclick="toggleBitFlag('${id}',${b.val},this)" data-bval="${b.val}">
+        <div class="enum-opt-body">
+          <div class="enum-opt-name">${b.name}</div>
+          <div style="font-family:var(--mono);font-size:9px;color:var(--text-dim);margin-left:auto;padding-left:4px;flex-shrink:0;">0x${b.val.toString(16).toUpperCase()}</div>
+        </div>
+      </div>`;
+    }).join('');
+    const hexDisplay = curVal ? '0x'+curVal.toString(16).toUpperCase() : '0x0';
+    valHtml = `<div class="enum-grid">${bitsHtml}</div>
+    <div style="margin-top:8px;display:flex;align-items:center;gap:10px;">
+      <span style="font-family:var(--mono);font-size:10px;color:var(--text-dim);">Hesaplanan değer:</span>
+      <span id="bitfield-out-${id}" style="font-family:var(--mono);font-size:11px;color:var(--accent);">${hexDisplay}</span>
       <button class="clear-btn" onclick="clearSetting('${id}')">Reset</button>
     </div>`;
   } else {
@@ -709,14 +754,15 @@ function openSetting(id) {
     valHtml = `<div class="hex-row">
       <span class="hex-prefix">0x</span>
       <input class="hex-input" type="text" value="${cv.toUpperCase()}" oninput="setHex('${id}',this.value)" placeholder="Hex value">
-      <span style="font-family:var(--mono);font-size:10px;color:var(--text-dim);">default: ${s.default}</span>
+      
       <button class="clear-btn" onclick="clearSetting('${id}')">Reset</button>
     </div>`;
   }
 
   let syntaxHtml = '';
   if (s.syntax) {
-    syntaxHtml = `<div class="syntax-box"><div class="syntax-label">Example:</div>${s.syntax}</div>`;
+    const syntaxFormatted = s.syntax.replace(/\\n/g,'<br>');
+    syntaxHtml = `<div class="syntax-box"><div class="syntax-label">Kullanım:</div>${syntaxFormatted}</div>`;
   }
 
   panel.innerHTML = `<div class="setting-header">
@@ -733,7 +779,9 @@ function openSetting(id) {
     ${valHtml}
   </div>
   ${syntaxHtml}
-  ${cur!=null?`<button class="btn danger" onclick="clearSetting('${id}')">Remove Setting</button>`:''}`;
+  ${cur!=null?`<div style="margin-top:16px;padding-top:14px;border-top:1px solid var(--border);">
+    <button class="btn danger" onclick="removeSetting('${id}')">Remove Setting</button>
+  </div>`:''}`;
 }
 
 function setEnum(id,val,el) {
@@ -779,6 +827,41 @@ function setHex(id,val) {
     if (decInput) decInput.value = parseInt(clean, 16);
   }
   afterChange(id);
+}
+
+function toggleBitFlag(id, bitVal, el) {
+  const cur = state[id] ? parseInt(state[id].replace(/^0x/i,''),16) : 0;
+  const isMask = (bitVal & (bitVal-1)) !== 0 && bitVal > 1;
+  let newVal;
+  if (isMask) {
+    const active = (cur & bitVal) === bitVal;
+    const maskClear = cur & ~bitVal;
+    newVal = active ? maskClear : (maskClear | bitVal);
+  } else {
+    newVal = cur ^ bitVal;
+  }
+  state[id] = '0x' + newVal.toString(16).toUpperCase();
+  // .enum-grid içindeki .enum-opt kutucuklarını güncelle
+  const grid = el.closest('.enum-grid');
+  if (grid) {
+    grid.querySelectorAll('.enum-opt[data-bval]').forEach(opt => {
+      const bv = parseInt(opt.dataset.bval);
+      const isMaskOpt = (bv & (bv-1)) !== 0 && bv > 1;
+      const active = isMaskOpt ? (newVal & bv) === bv : !!(newVal & bv);
+      opt.classList.toggle('selected', active);
+    });
+  }
+  const outEl = document.getElementById('bitfield-out-'+id);
+  if (outEl) outEl.textContent = newVal ? '0x'+newVal.toString(16).toUpperCase() : '0x0';
+  afterChange(id);
+}
+
+function removeSetting(id) {
+  delete state[id];
+  activeSetting = null;
+  document.getElementById('setting-panel').style.display = 'none';
+  document.getElementById('placeholder').style.display = 'flex';
+  afterChange(null);
 }
 
 function clearSetting(id) {
